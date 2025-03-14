@@ -1,5 +1,6 @@
 "use client";
 
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";
 
@@ -14,6 +15,7 @@ export default function Home() {
         and learn from the teacher.
       </p>
       <UserButton />
+      <ModeToggle />
 
       <Button onClick={() => alert("hello class!")}>Join Class</Button>
     </div>
