@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Home() {
   return (
@@ -12,6 +13,8 @@ export default function Home() {
         this is a virtual classroom for learning purpose. you can join the class
         and learn from the teacher.
       </p>
+      <UserButton />
+
       <Button onClick={() => alert("hello class!")}>Join Class</Button>
     </div>
   );
