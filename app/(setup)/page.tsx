@@ -1,27 +1,33 @@
-"use client";
-
-import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
 import db from "@/lib/db";
-import { UserButton } from "@clerk/nextjs";
+import { initialProfile } from "@/lib/initial-profile";
+import { redirect } from "next/navigation";
 
-// eslint-disable-next-line @next/next/no-async-client-component
 export default async function SetupPage() {
-  const server = await db.server.findMany();
+  const profile = await initialProfile();
+
+  const server = await db.server.findFirst({
+    where: {
+      members: {
+        some: {
+          profileId: profile.id,
+        },
+      },
+    },
+  });
+
+  if (server) {
+    return redirect(`/servers/${server.id}`);
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-11">
       <h1 className="text-center text-3xl text-indigo-500 font-bold">
-        Hello Virtual Classroom
+        Create a Server
       </h1>
-      <p>{server.length}</p>
       <p>
         this is a virtual classroom for learning purpose. you can join the class
         and learn from the teacher.
       </p>
-      <UserButton />
-      <ModeToggle />
-
-      <Button onClick={() => alert("hello class!")}>Join Class</Button>
     </div>
   );
 }
