@@ -2,14 +2,18 @@
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
+import db from "@/lib/db";
 import { UserButton } from "@clerk/nextjs";
 
-export default function Home() {
+// eslint-disable-next-line @next/next/no-async-client-component
+export default async function SetupPage() {
+  const server = await db.server.findMany();
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-11">
       <h1 className="text-center text-3xl text-indigo-500 font-bold">
         Hello Virtual Classroom
       </h1>
+      <p>{server.length}</p>
       <p>
         this is a virtual classroom for learning purpose. you can join the class
         and learn from the teacher.
