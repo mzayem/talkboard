@@ -4,6 +4,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 import {
   Dialog,
@@ -24,18 +25,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FileUpload from "../file-upload";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Classroom name is required",
   }),
-  image: z.string().min(1, {
+  imageUrl: z.string().min(1, {
     message: "Classroom image is required",
   }),
 });
 
 export default function InitialModal() {
   const [ismounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -44,14 +47,22 @@ export default function InitialModal() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      image: "",
+      imageUrl: "",
     },
   });
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      await axios.post("/api/courses", values);
+
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (!ismounted) return null;
@@ -74,7 +85,7 @@ export default function InitialModal() {
                 <div className="flex items-center justify-center text-center">
                   <FormField
                     control={form.control}
-                    name="image"
+                    name="imageUrl"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
