@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -21,7 +20,7 @@ model Profile{
   imageUrl String @db.Text
   email String @db.Text
 
-  servers Server[]
+  courses Course[]
   members Member[]
   channels Channel[]
 
@@ -29,7 +28,7 @@ model Profile{
   updatedAt DateTime @updatedAt
 }
 
-model Server {
+model Course {
   id String @id @default(uuid())
   name String
   imageUrl String @db.Text
@@ -61,14 +60,14 @@ model Member {
   profileId String
   profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  serverId String
-  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   @@index([profileId])
-  @@index([serverId])
+  @@index([courseId])
 }
 
 enum ChannelType{
@@ -85,12 +84,12 @@ model Channel {
   profileId String
   profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  serverId String
-  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([profileId])
-  @@index([serverId])
+  @@index([courseId])
 }
