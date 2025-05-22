@@ -37,7 +37,7 @@ export default function NavigationItem({
           className={cn(
             "relative group flex mx-3 h-[48px] w-[48px] rounded-[16px] transition-all overflow-hidden",
             params?.courseId !== id &&
-              "bg-primary/10 text-primary rounded-[16px]",
+              "bg-primary/10 text-primary rounded-full",
           )}
         >
           <Image

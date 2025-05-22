@@ -13,7 +13,7 @@ export default async function mainLayout({
       >
         <NavigationSidebar />
       </div>
-      <main className="md:pl-20 h-full">{children}</main>
+      <main className="md:pl-[72px] h-full">{children}</main>
     </div>
   );
 }
