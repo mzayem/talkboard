@@ -1,9 +1,8 @@
-// components/navigation/client-user-button.tsx
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
 
-export const ClientUserButton = () => {
+const ClientUserButton = () => {
   return (
     <UserButton
       afterSignOutUrl="/"
@@ -15,3 +14,5 @@ export const ClientUserButton = () => {
     />
   );
 };
+
+export default ClientUserButton;

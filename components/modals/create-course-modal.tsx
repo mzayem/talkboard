@@ -3,7 +3,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 import axios from "axios";
 
 import {
@@ -26,6 +25,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FileUpload from "../file-upload";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/use-modal-store";
+import { LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -36,13 +37,12 @@ const formSchema = z.object({
   }),
 });
 
-export default function InitialModal() {
-  const [ismounted, setIsMounted] = useState(false);
+export default function CreateCourseModal() {
+  const { isOpen, onClose, type } = useModal();
   const router = useRouter();
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isModalOpen = isOpen && type === "createCourse";
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,15 +59,19 @@ export default function InitialModal() {
 
       form.reset();
       router.refresh();
-      window.location.reload();
+      onClose();
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (!ismounted) return null;
+  const handleClose = () => {
+    form.reset();
+    onClose();
+  };
+
   return (
-    <Dialog open>
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
@@ -112,9 +116,10 @@ export default function InitialModal() {
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 
+                        className="bg-zinc-300/80 border-0 
                         focus-visible:ring-0
-                        focus-visible:ring-offset-0"
+                        focus-visible:ring-offset-0
+                        dark:bg-zinc-300/80"
                         placeholder="Enter classroom Name"
                         {...field}
                       />
@@ -126,6 +131,7 @@ export default function InitialModal() {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button disabled={isLoading} variant={"primary"}>
+                {isLoading && <LoaderCircle className="h-4 w-4 animate-spin" />}
                 Create
               </Button>
             </DialogFooter>
