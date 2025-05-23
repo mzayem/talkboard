@@ -19,6 +19,7 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface CourseHeaderProps {
   course: CourseWithMembersWithProfile;
@@ -26,6 +27,8 @@ interface CourseHeaderProps {
 }
 
 export default function CourseHeader({ course, role }: CourseHeaderProps) {
+  const { onOpen } = useModal();
+
   const isAdmin = role === MemberRole.ADMIN;
   const isTeacher = isAdmin || role === MemberRole.TEACHER;
 
@@ -48,6 +51,7 @@ export default function CourseHeader({ course, role }: CourseHeaderProps) {
       >
         {isTeacher && (
           <DropdownMenuItem
+            onClick={() => onOpen("invite", { course: course })}
             className="text-indigo-600 dark:text-indigo-400 
             px-3 py-2 text-sm cursor-pointer "
           >
