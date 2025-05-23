@@ -5,6 +5,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import ModalProvider from "@/components/providers/modal-provider";
+import { Toaster } from "react-hot-toast";
 
 import { cn } from "@/lib/utils";
 
@@ -37,6 +38,7 @@ export default function RootLayout({
             storageKey="talkboard-theme"
           >
             <ModalProvider />
+            <Toaster />
             {children}
           </ThemeProvider>
         </body>

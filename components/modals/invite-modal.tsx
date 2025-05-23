@@ -67,12 +67,13 @@ export default function InviteModal() {
           >
             Course Invite link
           </Label>
-          <div className="flex  items-center mt-2 gap-x-2">
+          <div className="flex items-center mt-2 gap-x-2">
             <Input
+              readOnly
               disabled={isLoading}
               className="bg-zinc-300/50 border-0 
-              focus-visible:ring-0 text-black
-              focus-visible:ring-offset-0"
+                  focus-visible:ring-0 text-black 
+                  focus-visible:ring-offset-0"
               value={inviteUrl}
             />
             <Button size={"icon"} onClick={onCopy} disabled={isLoading}>
@@ -93,7 +94,9 @@ export default function InviteModal() {
           >
             {isLoading ? "Generating..." : "Generate a new Link"}
             <RefreshCw
-              className={`h-4 w-4 ml-2 group-hover:rotate-90 transition ${isLoading && "animate-spin"}`}
+              className={`h-4 w-4 ml-2 group-hover:rotate-90 transition ${
+                isLoading && "animate-spin"
+              }`}
             />
           </Button>
         </div>

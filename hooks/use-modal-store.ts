@@ -1,7 +1,7 @@
 import { Course } from "@prisma/client";
 import { create } from "zustand";
 
-export type ModalType = "createCourse" | "invite";
+export type ModalType = "createCourse" | "invite" | "editCourse";
 
 interface ModalData {
   course?: Course;
@@ -20,5 +20,5 @@ export const useModal = create<ModalStore>((set) => ({
   data: {},
   isOpen: false,
   onOpen: (type, data = {}) => set({ isOpen: true, type, data }),
-  onClose: () => set({ type: null, isOpen: false }),
+  onClose: () => set({ type: null, isOpen: false, data: {} }),
 }));

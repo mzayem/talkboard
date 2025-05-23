@@ -7,9 +7,20 @@ import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function Dialog({
+  open,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />;
+  React.useEffect(() => {
+    if (open) {
+      document.body.style.pointerEvents = "auto";
+    }
+
+    return () => {
+      document.body.style.pointerEvents = "auto";
+    };
+  }, [open]);
+
+  return <DialogPrimitive.Root data-slot="dialog" open={open} {...props} />;
 }
 
 function DialogTrigger({

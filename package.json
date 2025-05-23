@@ -11,7 +11,7 @@
     "fmt:check": "prettier --check '**/*.{js,jsx,ts,tsx,json}'"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.12.5",
+    "@clerk/nextjs": "^6.20.0",
     "@hookform/resolvers": "^5.0.1",
     "@prisma/client": "^6.8.2",
     "@radix-ui/react-dialog": "^1.1.13",
@@ -26,12 +26,13 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.477.0",
-    "next": "15.2.1",
+    "next": "^15.2.3",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.56.4",
+    "react-hot-toast": "^2.5.2",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^7.7.2",
