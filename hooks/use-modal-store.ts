@@ -6,7 +6,9 @@ export type ModalType =
   | "invite"
   | "editCourse"
   | "members"
-  | "createChannel";
+  | "createChannel"
+  | "leaveCourse"
+  | "deleteCourse";
 
 interface ModalData {
   course?: Course;

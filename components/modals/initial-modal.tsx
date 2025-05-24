@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FileUpload from "../file-upload";
 import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -126,6 +127,7 @@ export default function InitialModal() {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button disabled={isLoading} variant={"primary"}>
+                {isLoading && <LoaderCircle className="h-4 w-4 animate-spin" />}
                 Create
               </Button>
             </DialogFooter>

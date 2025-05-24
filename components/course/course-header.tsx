@@ -88,13 +88,19 @@ export default function CourseHeader({ course, role }: CourseHeaderProps) {
         )}
         {isTeacher && <DropdownMenuSeparator />}
         {isAdmin && (
-          <DropdownMenuItem className="text-rose-500  px-3 py-2 text-sm cursor-pointer ">
+          <DropdownMenuItem
+            onClick={() => onOpen("deleteCourse", { course })}
+            className="text-rose-500  px-3 py-2 text-sm cursor-pointer "
+          >
             Delete Course
             <Trash className="ml-auto h-4 w-4" />
           </DropdownMenuItem>
         )}
         {!isAdmin && (
-          <DropdownMenuItem className="text-rose-500  px-3 py-2 text-sm cursor-pointer ">
+          <DropdownMenuItem
+            onClick={() => onOpen("leaveCourse", { course })}
+            className="text-rose-500  px-3 py-2 text-sm cursor-pointer "
+          >
             Leave Course
             <LogOut className="ml-auto h-4 w-4" />
           </DropdownMenuItem>

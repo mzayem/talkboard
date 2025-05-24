@@ -65,9 +65,34 @@ export default function CreateCourseModal() {
     }
   };
 
-  const handleClose = () => {
-    form.reset();
-    onClose();
+  const extractKeyFromUrl = (url: string) => {
+    const parts = url.split("/");
+    return parts[parts.length - 1]; // Extracts file key
+  };
+
+  const handleClose = async () => {
+    const values = form.getValues(); // Get form values safely
+
+    if (!values.imageUrl) {
+      form.reset();
+      onClose();
+      return;
+    }
+
+    try {
+      const key = extractKeyFromUrl(values.imageUrl);
+      form.reset();
+      onClose();
+      await fetch("/api/uploadthing/delete", {
+        method: "POST",
+        body: JSON.stringify({ key }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error("Image deletion failed:", error);
+    }
   };
 
   return (

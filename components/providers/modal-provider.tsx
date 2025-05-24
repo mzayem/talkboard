@@ -7,6 +7,8 @@ import InviteModal from "@/components/modals/invite-modal";
 import EditCourseModal from "@/components/modals/edit-course-modal";
 import MembersModal from "@/components/modals/members-modal";
 import CreateChannelModal from "@/components/modals/create-channel-modal";
+import LeaveCourseModal from "@/components/modals/leave-course-modal";
+import DeleteCourseModal from "@/components/modals/delete-course-modal copy";
 
 export default function ModalProvider() {
   const [isMounted, setIsMounted] = useState(false);
@@ -24,6 +26,8 @@ export default function ModalProvider() {
       <EditCourseModal />
       <MembersModal />
       <CreateChannelModal />
+      <LeaveCourseModal />
+      <DeleteCourseModal />
     </>
   );
 }
