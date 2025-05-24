@@ -1,7 +1,12 @@
 import { Course } from "@prisma/client";
 import { create } from "zustand";
 
-export type ModalType = "createCourse" | "invite" | "editCourse" | "members";
+export type ModalType =
+  | "createCourse"
+  | "invite"
+  | "editCourse"
+  | "members"
+  | "createChannel";
 
 interface ModalData {
   course?: Course;
