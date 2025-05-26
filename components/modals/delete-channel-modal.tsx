@@ -1,6 +1,12 @@
 "use client";
 
+import qs from "query-string";
 import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 import { useModal } from "@/hooks/use-modal-store";
 
 import {
@@ -12,24 +18,15 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { Loader2 } from "lucide-react";
 
-export default function DeleteCourseModal() {
+export default function DeleteChannelModal() {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
-  const isModalOpen = isOpen && type === "deleteCourse";
-  const { course } = data;
+  const isModalOpen = isOpen && type === "deleteChannel";
+  const { course, channel } = data;
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const extractKeyFromUrl = (url: string) => {
-    const parts = url.split("/");
-    return parts[parts.length - 1];
-  };
 
   const onClick = async () => {
     if (!course) {
@@ -37,25 +34,21 @@ export default function DeleteCourseModal() {
       return;
     }
 
-    const key = extractKeyFromUrl(course.imageUrl);
-
     try {
       setIsLoading(true);
-
-      await axios.delete(`/api/courses/${course?.id}`);
-
-      await fetch("/api/uploadthing/delete", {
-        method: "POST",
-        body: JSON.stringify({ key }),
-        headers: {
-          "Content-Type": "application/json",
+      const url = qs.stringifyUrl({
+        url: `/api/channels/${channel?.id}`,
+        query: {
+          courseId: course?.id,
         },
       });
 
+      await axios.delete(url);
+
       onClose();
       router.refresh();
-      router.push("/");
-      toast.success("You have deleted thecourse");
+      router.push(`/courses/${course?.id}`);
+      toast.success("You have deleted the channel");
     } catch (error) {
       console.log(error);
     } finally {
@@ -68,13 +61,13 @@ export default function DeleteCourseModal() {
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Delete Course
+            Delete Channel
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
             Are you sure you want to do this?
             <br />
             <span className="font-semibold text-indigo-500">
-              {course?.name + " "}
+              #{channel?.name + " "}
             </span>
             will be permanently deleted.
           </DialogDescription>
