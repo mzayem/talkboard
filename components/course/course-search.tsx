@@ -2,6 +2,8 @@
 
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+
 import {
   CommandDialog,
   CommandEmpty,
@@ -9,8 +11,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../ui/command";
-import { useParams, useRouter } from "next/navigation";
+} from "@/components/ui/command";
 
 interface CourseSearchProps {
   data: {
@@ -33,7 +34,7 @@ export default function CourseSearch({ data }: CourseSearchProps) {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "l") {
+      if (((e.ctrlKey || e.metaKey) && e.key === "M") || e.key === "m") {
         e.preventDefault();
         setOpen((open) => !open);
       }
@@ -52,7 +53,6 @@ export default function CourseSearch({ data }: CourseSearchProps) {
     type: "channel" | "member";
   }) => {
     setOpen(false);
-
     if (type === "member") {
       router.push(`/courses/${params.courseId}/conversations/${id}`);
     }
@@ -75,7 +75,7 @@ export default function CourseSearch({ data }: CourseSearchProps) {
           className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 
           font-mono text-[10px] font-medium text-muted-foreground ml-auto"
         >
-          <span className="text-xs">CTRL</span>l
+          <span className="text-xs">CTRL</span>M
         </kbd>
       </button>
       <CommandDialog open={open} onOpenChange={setOpen}>

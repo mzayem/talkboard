@@ -1,14 +1,18 @@
 import { ChannelType, MemberRole } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
 
 import { currentProfile } from "@/lib/current-profile";
 import db from "@/lib/db";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 import CourseHeader from "./course-header";
 import CourseSearch from "./course-search";
-import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
+import CourseSection from "./course-section";
+import CourseChannel from "./course-channel";
+import CourseMember from "./course-member";
 
 interface CourseSidebarProps {
   courseId: string;
@@ -127,6 +131,83 @@ export default async function CourseSidebar({ courseId }: CourseSidebarProps) {
             ]}
           />
         </div>
+        <Separator className="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2" />
+        {!!textChannels?.length && (
+          <div>
+            <CourseSection
+              sectionType="channels"
+              channelType={ChannelType.TEXT}
+              role={role}
+              label="Text Channels"
+            />
+            <div className="space-y-2">
+              {textChannels.map((channel) => (
+                <CourseChannel
+                  key={channel.id}
+                  channel={channel}
+                  role={role}
+                  course={course}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {!!audioChannels?.length && (
+          <div>
+            <CourseSection
+              sectionType="channels"
+              channelType={ChannelType.AUDIO}
+              role={role}
+              label="Voice Channels"
+            />
+            <div className="space-y-2">
+              {audioChannels.map((channel) => (
+                <CourseChannel
+                  key={channel.id}
+                  channel={channel}
+                  role={role}
+                  course={course}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {!!videoChannels?.length && (
+          <div>
+            <CourseSection
+              sectionType="channels"
+              channelType={ChannelType.VIDEO}
+              role={role}
+              label="Video Channels"
+            />
+            <div className="space-y-2">
+              {videoChannels.map((channel) => (
+                <CourseChannel
+                  key={channel.id}
+                  channel={channel}
+                  role={role}
+                  course={course}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {!!members?.length && (
+          <div>
+            <CourseSection
+              sectionType="members"
+              channelType={ChannelType.TEXT}
+              role={role}
+              label="Members"
+              course={course}
+            />
+            <div className="space-y-2">
+              {members.map((member) => (
+                <CourseMember key={member.id} member={member} course={course} />
+              ))}
+            </div>
+          </div>
+        )}
       </ScrollArea>
     </div>
   );
