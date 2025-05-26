@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ChannelType } from "@prisma/client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 import { LoaderCircle } from "lucide-react";
 
@@ -49,43 +49,43 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-export default function CreateChannelModal() {
+export default function EditChannelModal() {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
-  const params = useParams();
 
-  const isModalOpen = isOpen && type === "createChannel";
+  const isModalOpen = isOpen && type === "editChannel";
 
-  const { channelType } = data;
+  const { channel, course } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: channelType || ChannelType.TEXT,
+      type: channel?.type || ChannelType.TEXT,
     },
   });
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue("type", channelType);
+    if (channel) {
+      form.setValue("name", channel.name);
+      form.setValue("type", channel.type);
     }
-  }, [channelType, form]);
+  }, [channel, form]);
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
-        url: "/api/channels",
-        query: { courseId: params?.courseId },
+        url: `/api/channels/${channel?.id}`,
+        query: { courseId: course?.id },
       });
-      await axios.post(url, values);
+      await axios.patch(url, values);
 
       form.reset();
       router.refresh();
       onClose();
-      toast.success("Channel Created");
+      toast.success("Channel Edited");
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +101,7 @@ export default function CreateChannelModal() {
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -173,7 +173,7 @@ export default function CreateChannelModal() {
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button disabled={isLoading} variant={"primary"}>
                 {isLoading && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>

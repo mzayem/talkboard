@@ -48,7 +48,7 @@ export default function DeleteChannelModal() {
       onClose();
       router.refresh();
       router.push(`/courses/${course?.id}`);
-      toast.success("You have deleted the channel");
+      toast.success("Channel Deleted");
     } catch (error) {
       console.log(error);
     } finally {

@@ -10,6 +10,7 @@ import CreateChannelModal from "@/components/modals/create-channel-modal";
 import LeaveCourseModal from "@/components/modals/leave-course-modal";
 import DeleteCourseModal from "@/components/modals/delete-course-modal";
 import DeleteChannelModal from "@/components/modals/delete-channel-modal";
+import EditChannelModal from "@/components/modals/edit-channel-modal";
 
 export default function ModalProvider() {
   const [isMounted, setIsMounted] = useState(false);
@@ -29,6 +30,7 @@ export default function ModalProvider() {
       <CreateChannelModal />
       <LeaveCourseModal />
       <DeleteCourseModal />
+      <EditChannelModal />
       <DeleteChannelModal />
     </>
   );

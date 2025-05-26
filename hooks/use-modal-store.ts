@@ -9,6 +9,7 @@ export type ModalType =
   | "createChannel"
   | "leaveCourse"
   | "deleteCourse"
+  | "editChannel"
   | "deleteChannel";
 
 interface ModalData {

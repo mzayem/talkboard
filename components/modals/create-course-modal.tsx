@@ -27,6 +27,7 @@ import FileUpload from "../file-upload";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 import { LoaderCircle } from "lucide-react";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -60,6 +61,7 @@ export default function CreateCourseModal() {
       form.reset();
       router.refresh();
       onClose();
+      toast.success("Course Created");
     } catch (error) {
       console.log(error);
     }

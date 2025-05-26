@@ -55,7 +55,7 @@ export default function DeleteCourseModal() {
       onClose();
       router.refresh();
       router.push("/");
-      toast.success("You have deleted the course");
+      toast.success("Course Deleted");
     } catch (error) {
       console.log(error);
     } finally {
