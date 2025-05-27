@@ -12,13 +12,14 @@ const CourseIdLayout = async ({
   params: { courseId: string };
 }) => {
   const profile = await currentProfile();
+  const { courseId } = await params;
 
   if (!profile) {
     return <RedirectToSignIn />;
   }
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId,
+      id: courseId,
       members: {
         some: {
           profileId: profile.id,
@@ -36,7 +37,7 @@ const CourseIdLayout = async ({
         className="hidden md:flex h-full w-60 z-20
         flex-col fixed inset-y-0 "
       >
-        <CourseSidebar courseId={params.courseId} />
+        <CourseSidebar courseId={courseId} />
       </div>
       <main className="h-full md:pl-60">{children}</main>
     </div>
