@@ -12,7 +12,7 @@ import DeleteCourseModal from "@/components/modals/delete-course-modal";
 import DeleteChannelModal from "@/components/modals/delete-channel-modal";
 import EditChannelModal from "@/components/modals/edit-channel-modal";
 
-export default function ModalProvider() {
+export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -34,4 +34,4 @@ export default function ModalProvider() {
       <DeleteChannelModal />
     </>
   );
-}
+};
