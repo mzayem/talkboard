@@ -1,9 +1,9 @@
 "use client";
 
 import * as z from "zod";
+import qs from "query-string";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 import axios from "axios";
 
 import {
@@ -14,41 +14,32 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import FileUpload from "../file-upload";
 import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
+import { useModal } from "@/hooks/use-modal-store";
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Classroom name is required",
+  fileUrl: z.string().min(1, {
+    message: "Attachment is required",
   }),
-  imageUrl: z.string().min(1, {
-    message: "Classroom image is required",
-  }),
+  fileName: z.string().optional(),
 });
 
-export default function InitialModal() {
-  const [ismounted, setIsMounted] = useState(false);
+export default function MessageFileModal() {
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isModalOpen = isOpen && type === "messageFile";
+  const { apiUrl, query } = data;
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      imageUrl: "",
+      fileUrl: "",
+      fileName: "",
     },
   });
 
@@ -56,26 +47,59 @@ export default function InitialModal() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post("/api/courses", values);
+      const url = qs.stringifyUrl({
+        url: apiUrl || "",
+        query,
+      });
+
+      await axios.post(url, { ...values, content: values.fileUrl });
 
       form.reset();
       router.refresh();
-      window.location.reload();
+      onClose();
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (!ismounted) return null;
+  const extractKeyFromUrl = (url: string) => {
+    const parts = url.split("/");
+    return parts[parts.length - 1];
+  };
+
+  const handleClose = async () => {
+    const values = form.getValues();
+
+    if (!values.fileUrl) {
+      form.reset();
+      onClose();
+      return;
+    }
+
+    try {
+      const key = extractKeyFromUrl(values.fileUrl);
+      form.reset();
+      onClose();
+      await fetch("/api/uploadthing/delete", {
+        method: "POST",
+        body: JSON.stringify({ key }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error("File deletion failed:", error);
+    }
+  };
   return (
-    <Dialog open>
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Customize your virtual classroom
+            Add an attachment
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Give your classroom a Name and choose an Image.
+            Send a file as a message
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -84,51 +108,29 @@ export default function InitialModal() {
               <div className="flex items-center justify-center text-center">
                 <FormField
                   control={form.control}
-                  name="imageUrl"
+                  name="fileUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <FileUpload
-                          endpoint="courseImage"
+                          endpoint="messageFile"
                           value={field.value}
-                          onChange={field.onChange}
+                          name={form.watch("fileName")}
+                          onChange={(url, name) => {
+                            form.setValue("fileUrl", url || "");
+                            form.setValue("fileName", name || "");
+                          }}
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel
-                      className="uppercase text-xs font-bold text-zinc-500
-                    dark:text-secondary/70"
-                    >
-                      Classroom Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 
-                        focus-visible:ring-0
-                        focus-visible:ring-offset-0"
-                        placeholder="Enter classroom Name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button disabled={isLoading} variant={"primary"}>
                 {isLoading && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                Create
+                Send
               </Button>
             </DialogFooter>
           </form>

@@ -10,12 +10,15 @@ export type ModalType =
   | "leaveCourse"
   | "deleteCourse"
   | "editChannel"
-  | "deleteChannel";
+  | "deleteChannel"
+  | "messageFile";
 
 interface ModalData {
   course?: Course;
   channel?: Channel;
   channelType?: ChannelType;
+  apiUrl?: string;
+  query?: Record<string, string>;
 }
 
 interface ModalStore {

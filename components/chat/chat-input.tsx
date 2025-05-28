@@ -10,6 +10,7 @@ import { Plus, Smile } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import axios from "axios";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatInputProps {
   apiUrl: string;
@@ -29,6 +30,7 @@ export default function ChatInput({
   type,
 }: ChatInputProps) {
   const [mounted, setMounted] = useState(false);
+  const { onOpen } = useModal();
 
   useEffect(() => {
     setMounted(true);
@@ -72,7 +74,7 @@ export default function ChatInput({
                 <div className="relative p-4 pb-6">
                   <button
                     type="button"
-                    onClick={() => {}}
+                    onClick={() => onOpen("messageFile", { apiUrl, query })}
                     className="absolute top-7 left-8 h-[24px] w-[24px]
                     bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 
                     dark:hover:bg-zinc-300 transition rounded-full p-1 

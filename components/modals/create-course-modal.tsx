@@ -69,11 +69,11 @@ export default function CreateCourseModal() {
 
   const extractKeyFromUrl = (url: string) => {
     const parts = url.split("/");
-    return parts[parts.length - 1]; // Extracts file key
+    return parts[parts.length - 1];
   };
 
   const handleClose = async () => {
-    const values = form.getValues(); // Get form values safely
+    const values = form.getValues();
 
     if (!values.imageUrl) {
       form.reset();
@@ -119,7 +119,7 @@ export default function CreateCourseModal() {
                     <FormItem>
                       <FormControl>
                         <FileUpload
-                          endpoint="classImage"
+                          endpoint="courseImage"
                           value={field.value}
                           onChange={field.onChange}
                         />

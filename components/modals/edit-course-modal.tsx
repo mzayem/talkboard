@@ -97,7 +97,7 @@ export default function EditCourseModal() {
                     <FormItem>
                       <FormControl>
                         <FileUpload
-                          endpoint="classImage"
+                          endpoint="courseImage"
                           value={field.value}
                           onChange={field.onChange}
                         />
