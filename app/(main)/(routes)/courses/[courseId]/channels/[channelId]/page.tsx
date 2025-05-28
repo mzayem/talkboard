@@ -1,9 +1,11 @@
+import db from "@/lib/db";
+import { redirect } from "next/navigation";
+import { RedirectToSignIn } from "@clerk/nextjs";
+import { currentProfile } from "@/lib/current-profile";
+
 import ChatHeader from "@/components/chat/chat-header";
 import ChatInput from "@/components/chat/chat-input";
-import { currentProfile } from "@/lib/current-profile";
-import db from "@/lib/db";
-import { RedirectToSignIn } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import ChatMessages from "@/components/chat/chat-messages";
 
 interface ChannelIdPageProps {
   params: {
@@ -43,7 +45,20 @@ export default async function ChannelIdPage({ params }: ChannelIdPageProps) {
         courseId={params.courseId}
         type="channel"
       />
-      <div className="flex-1">future messages</div>
+      <ChatMessages
+        member={member}
+        name={channel.name}
+        chatId={channel.id}
+        type="channel"
+        apiUrl="/api/messages"
+        socketUrl="/api/socket/messages"
+        socketQuery={{
+          channelId: channel.id,
+          courseId: channel.courseId,
+        }}
+        paramKey="channelId"
+        paramValue={channel.id}
+      />
       <ChatInput
         name={channel.name}
         type="channel"
