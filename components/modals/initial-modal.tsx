@@ -58,8 +58,8 @@ export default function InitialModal() {
     try {
       await axios.post("/api/courses", values);
 
-      form.reset();
       router.refresh();
+      form.reset();
       window.location.reload();
     } catch (error) {
       console.log(error);

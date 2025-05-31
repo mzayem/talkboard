@@ -4,7 +4,6 @@ import { getFileType } from "@/lib/file-type";
 import { UploadDropzone } from "@/lib/uploadthing";
 
 import {
-  FileAudio,
   FileIcon,
   FileText,
   FolderArchive,
@@ -105,7 +104,10 @@ export default function FileUpload({
             Your browser does not support the video tag.
           </video>
         ) : fileType === "audio" ? (
-          <FileAudio className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
+          <audio controls className="w-[400px]">
+            <source src={value} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
         ) : fileType === "text" ? (
           <FileText className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
         ) : fileType === "zip" ? (
@@ -113,7 +115,7 @@ export default function FileUpload({
         ) : (
           <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
         )}
-        {fileType !== "video" && (
+        {fileType !== "video" && fileType !== "audio" && (
           <a
             href={value}
             target="_blank"
