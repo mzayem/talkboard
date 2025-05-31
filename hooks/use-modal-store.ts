@@ -11,7 +11,8 @@ export type ModalType =
   | "deleteCourse"
   | "editChannel"
   | "deleteChannel"
-  | "messageFile";
+  | "messageFile"
+  | "deleteMessage";
 
 interface ModalData {
   course?: Course;

@@ -4,7 +4,6 @@ import { z } from "zod";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import qs from "query-string";
-import { useRouter } from "next/navigation";
 import { Member, MemberRole, Profile } from "@prisma/client";
 import {
   Edit,
@@ -27,6 +26,7 @@ import ActionTooltip from "@/components/action-tooltip";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface chatItemProps {
   id: string;
@@ -68,8 +68,7 @@ export default function ChatItems({
   socketQuery,
 }: chatItemProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
+  const { onOpen } = useModal();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,7 +99,7 @@ export default function ChatItems({
       });
 
       await axios.patch(url, values);
-      router.refresh();
+
       form.reset();
       setIsEditing(false);
     } catch (error) {
@@ -273,7 +272,12 @@ export default function ChatItems({
           )}
           <ActionTooltip label="Delete">
             <Trash
-              onClick={() => setIsDeleting(true)}
+              onClick={() =>
+                onOpen("deleteMessage", {
+                  apiUrl: `${socketUrl}/${id}`,
+                  query: socketQuery,
+                })
+              }
               className="h-4 w-4 cursor-pointer ml-auto text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
             />
           </ActionTooltip>
