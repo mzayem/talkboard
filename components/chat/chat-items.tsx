@@ -180,7 +180,7 @@ export default function ChatItems({
             </a>
           )}
           {isAudio && (
-            <div className="relative flex items-center p-2 mt-2 rounded-md w-2/4 ">
+            <div className="relative flex items-center p-2 mt-2 rounded-md w-3/4 md:w-2/4 ">
               <audio controls className="w-full">
                 <source src={fileUrl} type="audio/mpeg" />
                 Your browser does not support the audio element.
