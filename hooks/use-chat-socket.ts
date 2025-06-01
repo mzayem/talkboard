@@ -15,6 +15,12 @@ type MessageWithMemberWithProfile = Message & {
   };
 };
 
+type PaginatedMessages = {
+  pages: {
+    items: MessageWithMemberWithProfile[];
+  }[];
+};
+
 export function useChatSocket({
   addKey,
   updateKey,
@@ -26,51 +32,57 @@ export function useChatSocket({
   useEffect(() => {
     if (!socket) return;
     socket.on(updateKey, (message: MessageWithMemberWithProfile) => {
-      querClient.setQueriesData([queryKey], (oldData: any) => {
-        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-          return oldData;
-        }
+      querClient.setQueriesData<PaginatedMessages>(
+        { queryKey: [queryKey] },
+        (oldData) => {
+          if (!oldData || !oldData.pages || oldData.pages.length === 0) {
+            return oldData;
+          }
 
-        const newData = oldData.pages.map((pages: any) => {
+          const newData = oldData.pages.map((pages) => {
+            return {
+              ...pages,
+              items: pages.items.map((items: MessageWithMemberWithProfile) => {
+                if (items.id === message.id) {
+                  return message;
+                }
+                return items;
+              }),
+            };
+          });
+
           return {
-            ...pages,
-            items: pages.items.map((items: MessageWithMemberWithProfile) => {
-              if (items.id === message.id) {
-                return message;
-              }
-              return items;
-            }),
+            ...oldData,
+            pages: newData,
           };
-        });
-
-        return {
-          ...oldData,
-          pages: newData,
-        };
-      });
+        },
+      );
     });
 
     socket.on(addKey, (message: MessageWithMemberWithProfile) => {
-      querClient.setQueriesData([queryKey], (oldData: any) => {
-        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-          return {
-            pages: [
-              {
-                items: [message],
-              },
-            ],
+      querClient.setQueriesData<PaginatedMessages>(
+        { queryKey: [queryKey] },
+        (oldData) => {
+          if (!oldData || !oldData.pages || oldData.pages.length === 0) {
+            return {
+              pages: [
+                {
+                  items: [message],
+                },
+              ],
+            };
+          }
+
+          const newData = [...oldData.pages];
+
+          newData[0] = {
+            ...newData[0],
+            items: [message, ...newData[0].items],
           };
-        }
 
-        const newData = [...oldData.pages];
-
-        newData[0] = {
-          ...newData[0],
-          items: [message, ...newData[0].items],
-        };
-
-        return { ...oldData, pages: newData };
-      });
+          return { ...oldData, pages: newData };
+        },
+      );
     });
 
     return () => {
