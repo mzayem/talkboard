@@ -34,7 +34,10 @@ export default function CourseSearch({ data }: CourseSearchProps) {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (((e.ctrlKey || e.metaKey) && e.key === "M") || e.key === "m") {
+      if (
+        ((e.ctrlKey || e.metaKey) && e.key === "M") ||
+        ((e.ctrlKey || e.metaKey) && e.key === "m")
+      ) {
         e.preventDefault();
         setOpen((open) => !open);
       }
@@ -54,10 +57,10 @@ export default function CourseSearch({ data }: CourseSearchProps) {
   }) => {
     setOpen(false);
     if (type === "member") {
-      router.push(`/courses/${params.courseId}/conversations/${id}`);
+      router.push(`/courses/${params?.courseId}/conversations/${id}`);
     }
     if (type === "channel") {
-      router.push(`/courses/${params.courseId}/channels/${id}`);
+      router.push(`/courses/${params?.courseId}/channels/${id}`);
     }
   };
 
