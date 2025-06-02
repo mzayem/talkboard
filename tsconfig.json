@@ -13,8 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "noEmit": false,
-    "outDir": "dist",
+    "noEmit": true,
     "rootDir": ".",
     "paths": {
       "@/*": ["./*"]
@@ -25,12 +24,6 @@
       }
     ]
   },
-  "include": [
-    "server",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
