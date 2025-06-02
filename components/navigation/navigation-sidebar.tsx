@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/mode-toggle";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NavigationItem from "@/components/navigation/navigation-item";
-import ClientUserButton from "@/components/clientUserButton";
+import SafeUserButton from "@/components/safeUserButton";
 
 export default async function NavigationSidebar() {
   const profile = await currentProfile();
@@ -51,7 +51,7 @@ export default async function NavigationSidebar() {
       </ScrollArea>
       <div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
         <ModeToggle />
-        <ClientUserButton />
+        <SafeUserButton />
       </div>
     </div>
   );
