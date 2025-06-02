@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/mode-toggle";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NavigationItem from "@/components/navigation/navigation-item";
-import ClientUserButton from "../clientUserButton";
+import ClientUserButton from "@/components/clientUserButton";
 
 export default async function NavigationSidebar() {
   const profile = await currentProfile();

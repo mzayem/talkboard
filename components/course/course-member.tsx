@@ -21,7 +21,7 @@ const roleIconMap = {
   [MemberRole.ADMIN]: <ShieldAlert className="h-4 w-4 ml-auto text-rose-500" />,
 };
 
-export default function CourseMember({ member, course }: CourseMemberProps) {
+export default function CourseMember({ member }: CourseMemberProps) {
   const params = useParams();
   const router = useRouter();
 
