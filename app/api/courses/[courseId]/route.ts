@@ -4,21 +4,22 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { courseId: string } },
+  { params }: { params: Promise<{ courseId: string }> },
 ) {
   try {
     const profile = await currentProfile();
+    const { courseId } = await params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params.courseId) {
+    if (!courseId) {
       return new NextResponse("CourseId is Missing", { status: 400 });
     }
     const course = await db.course.delete({
       where: {
-        id: params.courseId,
+        id: courseId,
         profileId: profile.id,
       },
     });
@@ -32,22 +33,23 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string } },
+  { params }: { params: Promise<{ courseId: string }> },
 ) {
   try {
     const profile = await currentProfile();
     const { name, imageUrl } = await req.json();
+    const { courseId } = await params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params.courseId) {
+    if (!courseId) {
       return new NextResponse("CourseId is Missing", { status: 400 });
     }
     const course = await db.course.update({
       where: {
-        id: params.courseId,
+        id: courseId,
         profileId: profile.id,
       },
       data: {

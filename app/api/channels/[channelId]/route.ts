@@ -8,9 +8,9 @@ export async function DELETE(
   {
     params,
   }: {
-    params: {
+    params: Promise<{
       channelId: string;
-    };
+    }>;
   },
 ) {
   try {
@@ -18,6 +18,7 @@ export async function DELETE(
     const { searchParams } = new URL(req.url);
 
     const courseId = searchParams.get("courseId");
+    const { channelId } = await params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -27,7 +28,7 @@ export async function DELETE(
       return new NextResponse("Course ID is missing", { status: 400 });
     }
 
-    if (!params.channelId) {
+    if (!channelId) {
       return new NextResponse("Channel ID is missing", { status: 400 });
     }
 
@@ -46,7 +47,7 @@ export async function DELETE(
       data: {
         channels: {
           delete: {
-            id: params.channelId,
+            id: channelId,
             name: {
               not: "general",
             },
@@ -67,9 +68,9 @@ export async function PATCH(
   {
     params,
   }: {
-    params: {
+    params: Promise<{
       channelId: string;
-    };
+    }>;
   },
 ) {
   try {
@@ -78,6 +79,7 @@ export async function PATCH(
     const { searchParams } = new URL(req.url);
 
     const courseId = searchParams.get("courseId");
+    const { channelId } = await params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -87,7 +89,7 @@ export async function PATCH(
       return new NextResponse("Course ID is missing", { status: 400 });
     }
 
-    if (!params.channelId) {
+    if (!channelId) {
       return new NextResponse("Channel ID is missing", { status: 400 });
     }
 
@@ -111,7 +113,7 @@ export async function PATCH(
         channels: {
           update: {
             where: {
-              id: params.channelId,
+              id: channelId,
               NOT: {
                 name: "general",
               },
