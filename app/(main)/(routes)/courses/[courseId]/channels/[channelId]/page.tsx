@@ -10,10 +10,10 @@ import ChatMessages from "@/components/chat/chat-messages";
 import MediaRoom from "@/components/media-room";
 
 interface ChannelIdPageProps {
-  params: {
+  params: Promise<{
     courseId: string;
     channelId: string;
-  };
+  }>;
 }
 
 export default async function ChannelIdPage({ params }: ChannelIdPageProps) {
@@ -23,15 +23,17 @@ export default async function ChannelIdPage({ params }: ChannelIdPageProps) {
     return <RedirectToSignIn />;
   }
 
+  const { courseId, channelId } = await params;
+
   const channel = await db.channel.findUnique({
     where: {
-      id: params.channelId,
+      id: channelId,
     },
   });
 
   const member = await db.member.findFirst({
     where: {
-      courseId: params.courseId,
+      courseId,
       profileId: profile.id,
     },
   });
@@ -42,11 +44,7 @@ export default async function ChannelIdPage({ params }: ChannelIdPageProps) {
 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
-      <ChatHeader
-        name={channel.name}
-        courseId={params.courseId}
-        type="channel"
-      />
+      <ChatHeader name={channel.name} courseId={courseId} type="channel" />
       {channel.type === ChannelType.TEXT && (
         <>
           <ChatMessages

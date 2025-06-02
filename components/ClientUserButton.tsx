@@ -2,7 +2,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
-export default function SafeUserButton() {
+export default function ClientUserButton() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

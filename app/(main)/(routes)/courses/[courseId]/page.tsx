@@ -4,13 +4,14 @@ import { RedirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 interface CoursesIDPageProps {
-  params: {
+  params: Promise<{
     courseId: string;
-  };
+  }>;
 }
 
 export default async function CoursesIDPage({ params }: CoursesIDPageProps) {
   const profile = await currentProfile();
+  const { courseId } = await params;
 
   if (!profile) {
     return <RedirectToSignIn />;
@@ -18,7 +19,7 @@ export default async function CoursesIDPage({ params }: CoursesIDPageProps) {
 
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId,
+      id: courseId,
       members: {
         some: {
           profileId: profile.id,
@@ -42,5 +43,5 @@ export default async function CoursesIDPage({ params }: CoursesIDPageProps) {
   if (initialChannel?.name !== "general") {
     return null;
   }
-  return redirect(`/courses/${params.courseId}/channels/${initialChannel.id}`);
+  return redirect(`/courses/${courseId}/channels/${initialChannel.id}`);
 }

@@ -11,13 +11,13 @@ import ChatInput from "@/components/chat/chat-input";
 import MediaRoom from "@/components/media-room";
 
 interface MemberIdPageProps {
-  params: {
+  params: Promise<{
     courseId: string;
     memberId: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     video?: boolean;
-  };
+  }>;
 }
 
 export default async function CourseMemberIdPage({
@@ -26,6 +26,7 @@ export default async function CourseMemberIdPage({
 }: MemberIdPageProps) {
   const profile = await currentProfile();
   const { courseId, memberId } = await params;
+  const { video } = await searchParams;
 
   if (!profile) {
     return <RedirectToSignIn />;
@@ -66,7 +67,7 @@ export default async function CourseMemberIdPage({
         type="conversation"
         courseId={courseId}
       />
-      {!searchParams.video && (
+      {!video && (
         <>
           <ChatMessages
             member={currentMember}
@@ -87,7 +88,7 @@ export default async function CourseMemberIdPage({
           />
         </>
       )}
-      {searchParams.video && (
+      {video && (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       )}
     </div>

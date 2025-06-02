@@ -4,7 +4,7 @@ import { RedirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 interface InvitePageProps {
-  params: { inviteCode: string };
+  params: Promise<{ inviteCode: string }>;
 }
 
 export default async function InvitePage({ params }: InvitePageProps) {
@@ -14,13 +14,15 @@ export default async function InvitePage({ params }: InvitePageProps) {
     return <RedirectToSignIn />;
   }
 
-  if (!params.inviteCode) {
+  const { inviteCode } = await params;
+
+  if (!inviteCode) {
     return redirect("/");
   }
 
   const existingCourse = await db.course.findFirst({
     where: {
-      inviteCode: params.inviteCode,
+      inviteCode,
       members: {
         some: {
           profileId: profile.id,
@@ -35,7 +37,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
 
   const course = await db.course.update({
     where: {
-      inviteCode: params.inviteCode,
+      inviteCode,
     },
     data: {
       members: {
