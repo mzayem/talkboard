@@ -5,9 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  {
-    params,
-  }: {
+  context: {
     params: Promise<{
       channelId: string;
     }>;
@@ -18,7 +16,7 @@ export async function DELETE(
     const { searchParams } = new URL(req.url);
 
     const courseId = searchParams.get("courseId");
-    const { channelId } = await params;
+    const { channelId } = await context.params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -65,9 +63,7 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  {
-    params,
-  }: {
+  context: {
     params: Promise<{
       channelId: string;
     }>;
@@ -79,7 +75,7 @@ export async function PATCH(
     const { searchParams } = new URL(req.url);
 
     const courseId = searchParams.get("courseId");
-    const { channelId } = await params;
+    const { channelId } = await context.params;
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });

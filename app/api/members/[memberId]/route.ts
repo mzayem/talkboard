@@ -4,12 +4,12 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ memberId: string }> },
+  context: { params: Promise<{ memberId: string }> },
 ) {
   try {
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
-    const { memberId } = await params;
+    const { memberId } = await context.params;
 
     const courseId = searchParams.get("courseId");
 
@@ -61,13 +61,13 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Promise<{ memberId: string }> },
+  context: { params: Promise<{ memberId: string }> },
 ) {
   try {
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
     const { role } = await req.json();
-    const { memberId } = await params;
+    const { memberId } = await context.params;
 
     const courseId = searchParams.get("courseId");
 

@@ -2,13 +2,15 @@
   "name": "virtual-classroom",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/server/index.js",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "fmt": "prettier --write '**/*.{js,jsx,ts,tsx,json}'",
-    "fmt:check": "prettier --check '**/*.{js,jsx,ts,tsx,json}'"
+    "fmt:check": "prettier --check '**/*.{js,jsx,ts,tsx,json}'",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.20.0",
